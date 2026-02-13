@@ -7,6 +7,8 @@ const { validate } = require('./src/validate');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const IS_VERCEL = !!process.env.VERCEL;
+const DEMOS_DIR = IS_VERCEL ? '/tmp/demos' : path.join(__dirname, 'demos');
 
 app.use(express.json());
 
@@ -34,7 +36,7 @@ const uploadFields = upload.fields([
 app.use('/dashboard', express.static(path.join(__dirname, 'dashboard')));
 
 // Serve generated demos
-app.use('/demos', express.static(path.join(__dirname, 'demos')));
+app.use('/demos', express.static(DEMOS_DIR));
 
 // Redirect root to dashboard
 app.get('/', (req, res) => {
@@ -76,7 +78,7 @@ app.post('/api/generate', (req, res) => {
       // Attach uploaded files to input for the generator
       input._files = req.files || {};
 
-      const result = await generate(input);
+      const result = await generate(input, DEMOS_DIR);
       res.json(result);
     } catch (err) {
       console.error('Generation error:', err);
@@ -87,16 +89,15 @@ app.post('/api/generate', (req, res) => {
 
 // List all generated demos
 app.get('/api/demos', (req, res) => {
-  const demosDir = path.join(__dirname, 'demos');
-  if (!fs.existsSync(demosDir)) {
+  if (!fs.existsSync(DEMOS_DIR)) {
     return res.json([]);
   }
-  const slugs = fs.readdirSync(demosDir).filter(d => {
-    const metaPath = path.join(demosDir, d, '_meta.json');
+  const slugs = fs.readdirSync(DEMOS_DIR).filter(d => {
+    const metaPath = path.join(DEMOS_DIR, d, '_meta.json');
     return fs.existsSync(metaPath);
   });
   const demos = slugs.map(slug => {
-    const meta = JSON.parse(fs.readFileSync(path.join(demosDir, slug, '_meta.json'), 'utf8'));
+    const meta = JSON.parse(fs.readFileSync(path.join(DEMOS_DIR, slug, '_meta.json'), 'utf8'));
     return { slug, ...meta };
   });
   demos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -105,7 +106,7 @@ app.get('/api/demos', (req, res) => {
 
 // Delete a demo
 app.delete('/api/demos/:slug', (req, res) => {
-  const demoDir = path.join(__dirname, 'demos', req.params.slug);
+  const demoDir = path.join(DEMOS_DIR, req.params.slug);
   if (!fs.existsSync(demoDir)) {
     return res.status(404).json({ error: 'Demo not found' });
   }
@@ -113,6 +114,11 @@ app.delete('/api/demos/:slug', (req, res) => {
   res.json({ ok: true });
 });
 
-app.listen(PORT, () => {
-  console.log(`Genny running at http://localhost:${PORT}`);
-});
+// Only listen when running locally (Vercel handles this itself)
+if (!IS_VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Genny running at http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

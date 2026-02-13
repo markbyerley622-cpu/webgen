@@ -16,7 +16,7 @@ function getExtension(mimetype) {
 
 const TEMPLATES_DIR = path.join(__dirname, '..', 'templates');
 const INDUSTRIES_DIR = path.join(__dirname, '..', 'industries');
-const DEMOS_DIR = path.join(__dirname, '..', 'demos');
+const DEFAULT_DEMOS_DIR = path.join(__dirname, '..', 'demos');
 
 // Load and compile a template file
 function loadTemplate(relPath) {
@@ -121,14 +121,14 @@ const PAGES = [
   { name: 'contact', title: 'Contact', template: 'pages/contact.hbs' }
 ];
 
-async function generate(userInput) {
+async function generate(userInput, demosDir) {
   // Register partials fresh each time (allows hot changes)
   registerPartials();
 
   const industryConfig = loadIndustry(userInput.industry);
   const context = buildContext(userInput, industryConfig);
   const slug = toSlug(userInput.businessName);
-  const demoDir = path.join(DEMOS_DIR, slug);
+  const demoDir = path.join(demosDir || DEFAULT_DEMOS_DIR, slug);
 
   // Create output directory
   fs.mkdirSync(demoDir, { recursive: true });
