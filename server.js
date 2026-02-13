@@ -38,6 +38,9 @@ app.use('/dashboard', express.static(path.join(__dirname, 'dashboard')));
 // Serve generated demos
 app.use('/demos', express.static(DEMOS_DIR));
 
+// Suppress favicon 404
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
 // Redirect root to dashboard
 app.get('/', (req, res) => {
   res.redirect('/dashboard');
