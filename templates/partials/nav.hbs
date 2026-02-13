@@ -1,0 +1,37 @@
+<nav class="bg-white shadow-sm fixed w-full top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <a href="index.html" class="flex items-center gap-3 text-xl font-bold font-heading text-accent-700">
+        {{#ifExists logoImage}}<img src="{{logoImage}}" alt="{{businessName}} logo" class="h-10 w-auto">{{/ifExists}}
+        <span>{{businessName}}</span>
+      </a>
+      <!-- Desktop nav -->
+      <div class="hidden md:flex items-center space-x-8">
+        {{#each navLinks}}
+        <a href="{{this.href}}" class="{{navActive ../currentPage this.page}} transition-colors font-medium">{{this.label}}</a>
+        {{/each}}
+        <a href="contact.html" class="bg-accent-600 hover:bg-accent-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors text-sm shadow-sm">
+          {{ctaText}}
+        </a>
+      </div>
+      <!-- Mobile hamburger -->
+      <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md text-gray-600 hover:text-accent-600 hover:bg-gray-100" aria-label="Toggle menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+    <div class="px-4 py-3 space-y-2">
+      {{#each navLinks}}
+      <a href="{{this.href}}" class="block px-3 py-2 rounded-md text-base font-medium {{navActiveMobile ../currentPage this.page}}">{{this.label}}</a>
+      {{/each}}
+      <a href="contact.html" class="block px-3 py-2.5 rounded-lg text-base font-semibold text-center bg-accent-600 text-white hover:bg-accent-700 transition-colors mt-2">
+        {{ctaText}}
+      </a>
+    </div>
+  </div>
+</nav>
+<div class="h-16"></div>

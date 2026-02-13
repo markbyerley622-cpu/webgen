@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genny — Website Demo Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 300: '#a5b4fc',
+              400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca',
+              800: '#3730a3', 900: '#312e81'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .spinner { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <header class="bg-white border-b border-gray-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-brand-700">Genny</h1>
+        <p class="text-sm text-gray-500">Website Demo Generator</p>
+      </div>
+      <button onclick="showTab('demos')" class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors" id="toggle-btn">
+        View Demos
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+    <!-- Generator Form -->
+    <div id="form-tab">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8">
+        <h2 class="text-xl font-semibold text-gray-900 mb-6">Create a New Demo</h2>
+
+        <form id="gen-form" class="space-y-6">
+          <!-- Row: Name + Industry -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Business Name <span class="text-red-500">*</span></label>
+              <input type="text" id="businessName" required placeholder="Joe's Pizza"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Industry <span class="text-red-500">*</span></label>
+              <select id="industry" required
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none bg-white">
+                <option value="">Select an industry...</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Tagline -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
+            <input type="text" id="tagline" placeholder="Leave blank for industry default"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+          </div>
+
+          <!-- Colors Row -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Primary Color</label>
+              <div class="flex items-center gap-3">
+                <input type="color" id="accentColor" value="#2563eb"
+                  class="w-12 h-10 rounded border border-gray-300 cursor-pointer p-0.5">
+                <input type="text" id="accentColorHex" value="#2563eb" pattern="^#[0-9a-fA-F]{6}$"
+                  class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none font-mono text-sm">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Secondary Color</label>
+              <div class="flex items-center gap-3">
+                <input type="color" id="secondaryColor" value="#f59e0b"
+                  class="w-12 h-10 rounded border border-gray-300 cursor-pointer p-0.5">
+                <input type="text" id="secondaryColorHex" value="#f59e0b" pattern="^#[0-9a-fA-F]{6}$"
+                  class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none font-mono text-sm">
+              </div>
+            </div>
+          </div>
+
+          <!-- About Section -->
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">About Section Title</label>
+              <input type="text" id="aboutTitle" placeholder="e.g. Our Story, About Us (leave blank for industry default)"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">About Description</label>
+              <textarea id="description" rows="3" placeholder="Leave blank for industry default"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none resize-y"></textarea>
+            </div>
+          </div>
+
+          <!-- Contact Info -->
+          <div>
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Contact Information <span class="text-gray-400 font-normal">(optional — sections hidden if empty)</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">Phone</label>
+                <input type="text" id="phone" placeholder="(555) 123-4567"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">Email</label>
+                <input type="email" id="email" placeholder="hello@business.com"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">Address</label>
+                <input type="text" id="location" placeholder="123 Main St, City"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Map Embed -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Google Maps Embed URL <span class="text-gray-400 font-normal">(optional)</span></label>
+            <input type="url" id="mapEmbed" placeholder="https://www.google.com/maps/embed?pb=..."
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+          </div>
+
+          <!-- Services -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-gray-700">Services / Menu Items <span class="text-gray-400 font-normal">(optional — uses industry defaults if empty)</span></h3>
+              <button type="button" onclick="addService()"
+                class="text-sm bg-brand-50 text-brand-700 hover:bg-brand-100 px-3 py-1 rounded-lg transition-colors font-medium">
+                + Add Item
+              </button>
+            </div>
+            <div id="services-list" class="space-y-3"></div>
+          </div>
+
+          <!-- Opening Hours -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-gray-700">Opening Hours <span class="text-gray-400 font-normal">(optional — uses defaults if empty)</span></h3>
+              <button type="button" onclick="addHoursRow()"
+                class="text-sm bg-brand-50 text-brand-700 hover:bg-brand-100 px-3 py-1 rounded-lg transition-colors font-medium">
+                + Add Hours
+              </button>
+            </div>
+            <div id="hours-list" class="space-y-3"></div>
+          </div>
+
+          <!-- Instagram Posts -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-semibold text-gray-700">Instagram Posts <span class="text-gray-400 font-normal">(optional — up to 6)</span></h3>
+              <button type="button" onclick="addInstagramPost()"
+                class="text-sm bg-brand-50 text-brand-700 hover:bg-brand-100 px-3 py-1 rounded-lg transition-colors font-medium">
+                + Add Post
+              </button>
+            </div>
+            <div id="instagram-list" class="space-y-3"></div>
+          </div>
+
+          <!-- Images -->
+          <div>
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">Images <span class="text-gray-400 font-normal">(optional — JPG, PNG, or WebP, max 5MB each)</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">Logo</label>
+                <input type="file" id="logo" accept="image/jpeg,image/png,image/webp"
+                  class="w-full text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 file:cursor-pointer">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">Banner / Hero Image</label>
+                <input type="file" id="banner" accept="image/jpeg,image/png,image/webp"
+                  class="w-full text-sm text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 file:cursor-pointer">
+              </div>
+            </div>
+            <!-- Gallery multi-upload -->
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">Gallery <span class="text-gray-400">(up to 10 images — click + to add more)</span></label>
+              <input type="file" id="gallery-input" accept="image/jpeg,image/png,image/webp" class="hidden">
+              <div id="gallery-previews" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-3"></div>
+              <button type="button" id="gallery-add-btn"
+                class="w-full border-2 border-dashed border-gray-300 rounded-lg py-4 text-sm text-gray-500 hover:border-brand-400 hover:text-brand-600 transition-colors cursor-pointer flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span id="gallery-add-label">Add gallery images</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="flex items-center gap-4 pt-2">
+            <button type="submit" id="submit-btn"
+              class="bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors shadow-sm">
+              Generate Demo
+            </button>
+            <span id="status-msg" class="text-sm text-gray-500 hidden"></span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Demos List -->
+    <div id="demos-tab" class="hidden">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-semibold text-gray-900">Generated Demos</h2>
+        <button onclick="showTab('form')" class="text-sm bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg transition-colors">
+          + New Demo
+        </button>
+      </div>
+      <div id="demos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Populated by JS -->
+      </div>
+      <p id="no-demos" class="text-gray-400 text-center py-12 hidden">No demos generated yet. Create your first one!</p>
+    </div>
+  </main>
+
+  <script>
+    // --- State ---
+    let serviceCount = 0;
+    let instagramCount = 0;
+
+    // --- Color picker sync ---
+    const colorPicker = document.getElementById('accentColor');
+    const colorHex = document.getElementById('accentColorHex');
+    colorPicker.addEventListener('input', () => { colorHex.value = colorPicker.value; });
+    colorHex.addEventListener('input', () => {
+      if (/^#[0-9a-fA-F]{6}$/.test(colorHex.value)) {
+        colorPicker.value = colorHex.value;
+      }
+    });
+
+    const secPicker = document.getElementById('secondaryColor');
+    const secHex = document.getElementById('secondaryColorHex');
+    secPicker.addEventListener('input', () => { secHex.value = secPicker.value; });
+    secHex.addEventListener('input', () => {
+      if (/^#[0-9a-fA-F]{6}$/.test(secHex.value)) {
+        secPicker.value = secHex.value;
+      }
+    });
+
+    // --- Load industries ---
+    async function loadIndustries() {
+      const res = await fetch('/api/industries');
+      const industries = await res.json();
+      const select = document.getElementById('industry');
+      industries.forEach(i => {
+        const opt = document.createElement('option');
+        opt.value = i.id;
+        opt.textContent = i.label;
+        select.appendChild(opt);
+      });
+    }
+    loadIndustries();
+
+    // --- Services management ---
+    function addService(name = '', description = '', price = '') {
+      serviceCount++;
+      const id = serviceCount;
+      const div = document.createElement('div');
+      div.id = `svc-${id}`;
+      div.className = 'flex flex-wrap gap-2 items-start bg-gray-50 rounded-lg p-3 border border-gray-200';
+      div.innerHTML = `
+        <input type="text" placeholder="Name" value="${esc(name)}" class="svc-name flex-1 min-w-[120px] border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        <input type="text" placeholder="Description" value="${esc(description)}" class="svc-desc flex-[2] min-w-[180px] border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        <input type="text" placeholder="Price" value="${esc(price)}" class="svc-price w-20 border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        <button type="button" onclick="removeService(${id})" class="text-gray-400 hover:text-red-500 px-2 py-1.5 transition-colors" title="Remove">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      `;
+      document.getElementById('services-list').appendChild(div);
+    }
+
+    function removeService(id) {
+      const el = document.getElementById(`svc-${id}`);
+      if (el) el.remove();
+    }
+
+    function getServices() {
+      const items = [];
+      document.querySelectorAll('#services-list > div').forEach(div => {
+        const name = div.querySelector('.svc-name')?.value?.trim();
+        const description = div.querySelector('.svc-desc')?.value?.trim();
+        const price = div.querySelector('.svc-price')?.value?.trim();
+        if (name) {
+          const svc = { name, description: description || '' };
+          if (price) svc.price = price;
+          items.push(svc);
+        }
+      });
+      return items;
+    }
+
+    function esc(s) { return s.replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+    // --- Instagram post management ---
+    function addInstagramPost(url = '') {
+      const list = document.getElementById('instagram-list');
+      if (list.children.length >= 6) return;
+      instagramCount++;
+      const id = instagramCount;
+      const div = document.createElement('div');
+      div.id = `ig-${id}`;
+      div.className = 'flex gap-2 items-center bg-gray-50 rounded-lg p-3 border border-gray-200';
+      div.innerHTML = `
+        <input type="url" placeholder="https://www.instagram.com/p/..." value="${esc(url)}" class="ig-url flex-1 border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        <button type="button" onclick="removeInstagramPost(${id})" class="text-gray-400 hover:text-red-500 px-2 py-1.5 transition-colors" title="Remove">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      `;
+      list.appendChild(div);
+    }
+
+    function removeInstagramPost(id) {
+      const el = document.getElementById(`ig-${id}`);
+      if (el) el.remove();
+    }
+
+    function getInstagramPosts() {
+      const urls = [];
+      document.querySelectorAll('#instagram-list .ig-url').forEach(input => {
+        const url = input.value.trim();
+        if (url) urls.push(url);
+      });
+      return urls;
+    }
+
+    // --- Gallery management ---
+    const galleryFiles = [];
+    const galleryInput = document.getElementById('gallery-input');
+    const galleryPreviews = document.getElementById('gallery-previews');
+    const galleryAddBtn = document.getElementById('gallery-add-btn');
+    const galleryAddLabel = document.getElementById('gallery-add-label');
+
+    galleryAddBtn.addEventListener('click', () => {
+      if (galleryFiles.length >= 10) return;
+      galleryInput.click();
+    });
+
+    galleryInput.addEventListener('change', () => {
+      const files = Array.from(galleryInput.files);
+      const remaining = 10 - galleryFiles.length;
+      const toAdd = files.slice(0, remaining);
+      toAdd.forEach(file => {
+        galleryFiles.push(file);
+        renderGalleryPreview(file, galleryFiles.length - 1);
+      });
+      updateGalleryLabel();
+      galleryInput.value = '';
+    });
+
+    function renderGalleryPreview(file, index) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'relative group';
+      wrapper.dataset.galleryIndex = index;
+      const img = document.createElement('img');
+      img.className = 'w-full h-24 object-cover rounded-lg border border-gray-200';
+      const reader = new FileReader();
+      reader.onload = (e) => { img.src = e.target.result; };
+      reader.readAsDataURL(file);
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow';
+      removeBtn.innerHTML = '&times;';
+      removeBtn.onclick = () => removeGalleryImage(index);
+      wrapper.appendChild(img);
+      wrapper.appendChild(removeBtn);
+      galleryPreviews.appendChild(wrapper);
+    }
+
+    function removeGalleryImage(index) {
+      galleryFiles.splice(index, 1);
+      rebuildGalleryPreviews();
+      updateGalleryLabel();
+    }
+
+    function rebuildGalleryPreviews() {
+      galleryPreviews.innerHTML = '';
+      galleryFiles.forEach((file, i) => renderGalleryPreview(file, i));
+    }
+
+    function updateGalleryLabel() {
+      const count = galleryFiles.length;
+      if (count === 0) {
+        galleryAddLabel.textContent = 'Add gallery images';
+      } else if (count >= 10) {
+        galleryAddLabel.textContent = 'Maximum 10 images reached';
+      } else {
+        galleryAddLabel.textContent = `Add more (${count}/10 selected)`;
+      }
+      galleryAddBtn.disabled = count >= 10;
+      if (count >= 10) {
+        galleryAddBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        galleryAddBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    // --- Hours management ---
+    let hoursCount = 0;
+
+    function addHoursRow(day = '', hours = '') {
+      hoursCount++;
+      const id = hoursCount;
+      const div = document.createElement('div');
+      div.id = `hrs-${id}`;
+      div.className = 'flex gap-2 items-center bg-gray-50 rounded-lg p-3 border border-gray-200';
+      div.innerHTML = `
+        <input type="text" placeholder="e.g. Monday - Friday" value="${esc(day)}" class="hrs-day flex-1 border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        <input type="text" placeholder="e.g. 9:00 AM - 5:00 PM" value="${esc(hours)}" class="hrs-hours flex-1 border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+        <button type="button" onclick="removeHoursRow(${id})" class="text-gray-400 hover:text-red-500 px-2 py-1.5 transition-colors" title="Remove">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      `;
+      document.getElementById('hours-list').appendChild(div);
+    }
+
+    function removeHoursRow(id) {
+      const el = document.getElementById(`hrs-${id}`);
+      if (el) el.remove();
+    }
+
+    function getHours() {
+      const items = [];
+      document.querySelectorAll('#hours-list > div').forEach(div => {
+        const day = div.querySelector('.hrs-day')?.value?.trim();
+        const hours = div.querySelector('.hrs-hours')?.value?.trim();
+        if (day) items.push({ day, hours: hours || '' });
+      });
+      return items;
+    }
+
+    // --- Form submission ---
+    document.getElementById('gen-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const msg = document.getElementById('status-msg');
+
+      btn.disabled = true;
+      btn.innerHTML = '<svg class="w-5 h-5 spinner inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>Generating...';
+      msg.classList.add('hidden');
+
+      const payload = {
+        businessName: document.getElementById('businessName').value.trim(),
+        industry: document.getElementById('industry').value,
+        tagline: document.getElementById('tagline').value.trim() || undefined,
+        aboutTitle: document.getElementById('aboutTitle').value.trim() || undefined,
+        description: document.getElementById('description').value.trim() || undefined,
+        accentColor: colorHex.value,
+        secondaryColor: secHex.value,
+        phone: document.getElementById('phone').value.trim() || undefined,
+        email: document.getElementById('email').value.trim() || undefined,
+        location: document.getElementById('location').value.trim() || undefined,
+        mapEmbed: document.getElementById('mapEmbed').value.trim() || undefined,
+        services: getServices(),
+        hours: getHours(),
+        instagramPosts: getInstagramPosts()
+      };
+
+      // Remove undefined keys
+      Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
+      if (payload.services && payload.services.length === 0) delete payload.services;
+      if (payload.hours && payload.hours.length === 0) delete payload.hours;
+      if (payload.instagramPosts && payload.instagramPosts.length === 0) delete payload.instagramPosts;
+
+      // Build FormData with JSON payload + files
+      const formData = new FormData();
+      formData.append('data', JSON.stringify(payload));
+
+      const logoFile = document.getElementById('logo').files[0];
+      if (logoFile) formData.append('logo', logoFile);
+
+      const bannerFile = document.getElementById('banner').files[0];
+      if (bannerFile) formData.append('banner', bannerFile);
+
+      for (let i = 0; i < galleryFiles.length; i++) {
+        formData.append('gallery', galleryFiles[i]);
+      }
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          const errMsg = data.errors ? data.errors.join(', ') : data.error;
+          throw new Error(errMsg);
+        }
+
+        msg.textContent = 'Demo generated successfully!';
+        msg.className = 'text-sm text-green-600';
+        msg.classList.remove('hidden');
+
+        // Open preview
+        window.open(data.previewUrl, '_blank');
+      } catch (err) {
+        msg.textContent = 'Error: ' + err.message;
+        msg.className = 'text-sm text-red-600';
+        msg.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Generate Demo';
+      }
+    });
+
+    // --- Tabs ---
+    function showTab(tab) {
+      const formTab = document.getElementById('form-tab');
+      const demosTab = document.getElementById('demos-tab');
+      const toggleBtn = document.getElementById('toggle-btn');
+
+      if (tab === 'demos') {
+        formTab.classList.add('hidden');
+        demosTab.classList.remove('hidden');
+        toggleBtn.textContent = 'New Demo';
+        toggleBtn.onclick = () => showTab('form');
+        loadDemos();
+      } else {
+        formTab.classList.remove('hidden');
+        demosTab.classList.add('hidden');
+        toggleBtn.textContent = 'View Demos';
+        toggleBtn.onclick = () => showTab('demos');
+      }
+    }
+
+    // --- Load demos ---
+    async function loadDemos() {
+      const res = await fetch('/api/demos');
+      const demos = await res.json();
+      const grid = document.getElementById('demos-grid');
+      const noDemos = document.getElementById('no-demos');
+
+      if (demos.length === 0) {
+        grid.innerHTML = '';
+        noDemos.classList.remove('hidden');
+        return;
+      }
+
+      noDemos.classList.add('hidden');
+      grid.innerHTML = demos.map(d => `
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h3 class="font-semibold text-gray-900">${esc(d.businessName)}</h3>
+              <span class="text-xs text-gray-500">${esc(d.industryLabel || d.industry)}</span>
+            </div>
+            <div class="w-6 h-6 rounded-full border-2 border-gray-200" style="background-color: ${d.accentColor}"></div>
+          </div>
+          <p class="text-xs text-gray-400 mb-4">${new Date(d.createdAt).toLocaleDateString()} ${new Date(d.createdAt).toLocaleTimeString()}</p>
+          <div class="flex gap-2">
+            <a href="/demos/${d.slug}/index.html" target="_blank"
+              class="flex-1 text-center text-sm bg-brand-50 text-brand-700 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors font-medium">
+              Preview
+            </a>
+            <button onclick="deleteDemo('${d.slug}')"
+              class="text-sm text-gray-400 hover:text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">
+              Delete
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- Delete demo ---
+    async function deleteDemo(slug) {
+      if (!confirm('Delete this demo? This cannot be undone.')) return;
+      await fetch(`/api/demos/${slug}`, { method: 'DELETE' });
+      loadDemos();
+    }
+  </script>
+</body>
+</html>

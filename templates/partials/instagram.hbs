@@ -1,0 +1,17 @@
+{{#hasItems instagramPosts}}
+<section class="py-20 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-heading font-bold text-center mb-4">Follow Our Journey</h2>
+    <p class="text-gray-500 text-center mb-12 max-w-xl mx-auto">See what we've been up to on Instagram</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{#each instagramPosts}}
+      <div data-aos="fade-up" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="{{this}}" data-instgrm-version="14" style="width:100%; min-width:0; margin:0; border:0; padding:0;">
+          <a href="{{this}}" target="_blank" class="block p-4 text-sm text-accent-600 hover:text-accent-700 transition-colors">View this post on Instagram</a>
+        </blockquote>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
+{{/hasItems}}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{pageTitle}} — {{businessName}}</title>
+  <meta name="description" content="{{metaDescription}}">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: {{{json palette}}},
+            secondary: {{{json secondaryPalette}}}
+          },
+          fontFamily: {
+            heading: ['{{{fonts.heading}}}', 'sans-serif'],
+            body: ['{{{fonts.body}}}', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family={{encodeURI fonts.heading}}:wght@400;600;700&family={{encodeURI fonts.body}}:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    body { font-family: '{{{fonts.body}}}', sans-serif; }
+    h1, h2, h3, h4, h5, h6 { font-family: '{{{fonts.heading}}}', sans-serif; }
+  </style>
+</head>
+<body class="bg-white text-gray-800 antialiased">
+  {{> nav}}
+  <main>
+    {{{body}}}
+  </main>
+  {{> footer}}
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+  </script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>AOS.init({ duration: 700, once: true, offset: 50 });</script>
+  {{#hasItems instagramPosts}}
+  <script async src="//www.instagram.com/embed.js"></script>
+  {{/hasItems}}
+</body>
+</html>

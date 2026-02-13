@@ -1,0 +1,15 @@
+{{#hasItems hours}}
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+  <h3 class="text-lg font-heading font-semibold text-gray-900 mb-4">Business Hours</h3>
+  <table class="w-full text-sm">
+    <tbody>
+      {{#each hours}}
+      <tr class="border-b border-gray-100 last:border-0">
+        <td class="py-2 font-medium text-gray-700">{{this.day}}</td>
+        <td class="py-2 text-right text-gray-600">{{this.hours}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+{{/hasItems}}

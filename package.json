@@ -1,0 +1,18 @@
+{
+  "name": "genny",
+  "version": "1.0.0",
+  "description": "Website demo generator for local business outreach",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "dependencies": {
+    "claude": "^0.1.1",
+    "express": "^4.21.0",
+    "handlebars": "^4.7.8",
+    "multer": "^2.0.2"
+  }
+}

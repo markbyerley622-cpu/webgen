@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "WebSearch",
+      "WebFetch(domain:handlebarsjs.com)",
+      "Bash(npm install:*)",
+      "Bash(node -e:*)",
+      "WebFetch(domain:www.willowcafe.com.au)",
+      "Bash(powershell -Command:*)",
+      "Bash(powershell:*)",
+      "Bash(\"C:\\\\Users\\\\markb\\\\Desktop\\\\genny\\\\fix-footer.ps1\" << 'ENDOFSCRIPT'\nGet-ChildItem -Path \"C:\\\\Users\\\\markb\\\\Desktop\\\\genny\\\\demos\" -Recurse -Filter \"*.html\" | ForEach-Object {\n    $content = Get-Content $_.FullName -Raw\n    if \\($content -match 'bg-gray-900 text-gray-300 mt-16'\\) {\n        $updated = $content -replace 'bg-gray-900 text-gray-300 mt-16', 'bg-gray-900 text-gray-300'\n        Set-Content -Path $_.FullName -Value $updated -NoNewline\n        Write-Host \"Updated: $\\($_.FullName\\)\"\n    } else {\n        Write-Host \"No match: $\\($_.FullName\\)\"\n    }\n}\nENDOFSCRIPT)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
